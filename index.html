@@ -94,8 +94,8 @@
           .host("use2-api.mapd.cloud")
           .port("443")
           .dbName("mapd")
-          .user("R81305AFD451E497E820")
-          .password("YB81a6yhSbm4GWcaRokjlAfiN9z1LzmMu29P3u6S")
+          .user("API Key Name from cloud instance SETTINGS")
+          .password("API Key Secret from cloud instance SETTINGS")
           .connect(function(error, con) {
             // hook up crossfilter, then run createCharts
             crossfilter.crossfilter(con, "tutela_converge").then(createCharts);
