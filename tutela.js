@@ -82,13 +82,26 @@ function Geocoder(chart) {
 function createCharts(crossFilter, con) {
   var colorScheme = ["#22A7F0", "#3ad6cd", "#d4e666"];
 
+  var defaultColorRange = [
+    "#115f9a",
+    "#1984c5",
+    "#22a7f0",
+    "#48b5c4",
+    "#76c68f",
+    "#a6d75b",
+    "#c9e52f",
+    "#d0ee11",
+    "#d0f400"
+  ];
+
   var w =
     Math.max(document.documentElement.clientWidth, window.innerWidth || 0) - 50;
   var h =
     Math.max(document.documentElement.clientHeight, window.innerHeight || 0) -
     200;
 
-  var allColumns = crossFilter.getColumns();
+  // You can get an array of columns with this command
+  // var allColumns = crossFilter.getColumns();
 
   var rowChartDimension = crossFilter.dimension("Location_City");
 
@@ -124,25 +137,21 @@ function createCharts(crossFilter, con) {
     .legend(dc.legend());
 
   /*----------------BACKEND RENDERED POINT MAP EXAMPLE-----------------------*/
-  //var langDomain = ['en', 'pt', 'es', 'in', 'und', 'ja', 'tr', 'fr', 'tl', 'ru', 'ar', 'th', 'it', 'nl', 'sv', 'ht', 'de', 'et', 'pl', 'sl', 'ko', 'fi', 'lv', 'sk', 'uk', 'da', 'zh', 'ro', 'no', 'cy', 'iw', 'hu', 'bg', 'lt', 'bs', 'vi', 'el', 'is', 'hi', 'hr', 'fa', 'ur', 'ne', 'ta',  'sr', 'bn', 'si', 'ml', 'hy', 'lo', 'iu', 'ka', 'ps', 'te', 'pa', 'am', 'kn', 'chr', 'my', 'gu', 'ckb', 'km', 'ug', 'sd', 'bo', 'dv'];
-  //var langOriginColors = ["#27aeef", "#ea5545", "#87bc45", "#b33dc6", "#f46a9b", "#ede15b", "#bdcf32", "#ef9b20", "#4db6ac", "#edbf33", "#7c4dff"]
-  //var langColors = [];
-  //var pointMapDim = crossFilter.dimension(null).projectOn(["conv_4326_900913_x(Longitude_Center) as x", "conv_4326_900913_y(Latitude_Center) as y"]);
   var xDim = crossFilter.dimension("Longitude_Center");
   var yDim = crossFilter.dimension("Latitude_Center");
   var parent = document.getElementById("chart3example");
-  // mapLangColors(40);
   var mapboxToken =
     "pk.eyJ1IjoibWFwZCIsImEiOiJjaWV1a3NqanYwajVsbmdtMDZzc2pneDVpIn0.cJnk8c2AxdNiRNZWtx5A9g";
+
   /* Point Map Radius Size:
-* in order to calculate the radius size.  We use d3 scale and pass in a
-* domain and range.
-
-To learn more about d3 scales, please read this:
-https://github.com/d3/d3-scale
-
-We then pass this scale into the r function within bubbleRasterChart
-*/
+   * in order to calculate the radius size.  We use d3 scale and pass in a
+   * domain and range.
+   *
+   * To learn more about d3 scales, please read this:
+   * https://github.com/d3/d3-scale
+   *
+   * We then pass this scale into the r function within bubbleRasterChart
+   */
   var sizeScale = d3.scale
     .linear()
     .domain([0, 5000])
@@ -175,16 +184,11 @@ We then pass this scale into the r function within bubbleRasterChart
           type: "quantitative",
           field: "conv_4326_900913_y(Latitude_Center)"
         },
-        size: 11,
         color: {
-          domain: "auto"
-        }
-        /*color: {
-    type: "ordinal",
-    field: "lang",
-    domain: langDomain,
-    range: langColors
-  } */
+          type: "density",
+          range: defaultColorRange
+        },
+        size: "auto"
       },
       config: {
         point: {
@@ -194,16 +198,7 @@ We then pass this scale into the r function within bubbleRasterChart
     })
     .xDim(xDim)
     .yDim(yDim)
-    .popupColumns(["Average_Latency"]);
-
-  /*
-function mapLangColors(n) {
-langDomain = langDomain.slice(0, n);
-for (var i = 0; i < langDomain.length; i++) {
-  langColors.push(langOriginColors[i%langOriginColors.length]);
-}
-}
-*/
+    .popupColumns(["Device_SIMServiceProviderBrandName", "Average_Latency", "Connection_Category", "LocalYear"]);
 
   pointMapChart
     .pushLayer("points", pointLayer)
