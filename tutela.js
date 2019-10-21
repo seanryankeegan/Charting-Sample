@@ -120,21 +120,10 @@ function createCharts(crossFilter, con) {
     .group(rowChartGroup)
     .autoScroll(true);
 
-  var pieChartDimension = crossFilter.dimension(
-    "Device_SIMServiceProviderBrandName"
-  );
-  var pieChartGroup = pieChartDimension.group().reduceCount();
 
-  var dcPieChart = dc
-    .pieChart(".chart2-example")
-    .height(h / 1.5)
-    .width(w / 2)
-    .slicesCap(4)
-    .innerRadius(100)
-    .dimension(pieChartDimension)
-    .group(pieChartGroup)
-    .ordinalColors(colorScheme)
-    .legend(dc.legend());
+  /** Pie chart **/
+  /*-----------------------PIE CHART-----------------------------------------*/
+
 
   /*----------------BACKEND RENDERED POINT MAP EXAMPLE-----------------------*/
   var xDim = crossFilter.dimension("Longitude_Center");
